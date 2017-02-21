@@ -1,0 +1,59 @@
+#Docker file for mounting Naevatec Jenkins server
+
+FROM jenkins:latest
+
+USER root 
+
+RUN mkdir /var/log/jenkins &&\
+    mkdir /var/cache/jenkins &&\
+    mkdir /var/log/jenkins
+
+RUN chown -R jenkins:jenkins /var/log/jenkins &&\
+    chown -R jenkins:jenkins /var/cache/jenkins &&\
+    chown -R jenkins:jenkins /var/log/jenkins
+
+# for host access to the jenkins logs and paths configure properly
+# in docker-compose.yml with volumes
+
+#TODO: Back-up configuration
+
+##############################
+# Plugin configuration
+##############################
+# in order to obtain a list of plugins installed on a running jenkins use:
+# $  curl -sSL "http://user:password@jenkins_url[:port]/pluginManager/api/xml?depth=1&xpath=/*/*/shortName|/*/*/version&wrapper=plugins" | perl -pe 's/.*?<shortName>([\w-]+).*?<version>([^<]+)()(<\/\w+>)+/\1 \2\n/g'|sed 's/ /:/' > plugins.txt
+
+COPY install-plugins.sh plugins/install-plugins.sh
+COPY plugins.txt plugins/plugins.txt
+
+ENV REF_DIR .
+
+###############################
+#Docker configuration 
+###############################
+
+#Docker sock volume
+VOLUME /var/run/docker.sock
+
+#Docker bin volume
+VOLUME /usr/bin/docker
+
+#add docker group to container execute to set env $DOCKER_GROUP_ID
+RUN groupadd -g $DOCKER_GROUP_ID docker
+
+#add jenkins to docker group
+RUN useradd -aG docker jenkins
+
+
+
+
+
+
+
+
+
+
+USER jenkins
+
+
+
