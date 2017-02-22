@@ -59,13 +59,6 @@ If you don't need or don't want to preinstall any plugins just comment or delete
 
 ### Docker configuration 
 
-Docker volumes (sock and bin) 
-
-```
-    VOLUME /var/run/docker.sock
-    VOLUME /usr/bin/docker
-```
-
 For Jenkins being able to run docker commands over the docker host it is not necessary to install a full docker on the container
 but add the bin/docker of the host as a volume. And (of course) set permissions. We don't enable all conections to the docker host 
 but we add the Jenkins user of the container to the docker group in the host. It maintains somewhat security on our host.
@@ -145,6 +138,11 @@ shoud configure your own volumes that satisfies your own needs.
 ```
       - /home/ubuntu/dockerImages:/home/ubuntu/dockerImages
       - built_jars:/home/ubuntu/shared/jars
+```
+The volumes necessary for using the docker of the host are:
+```
+     - /usr/bin/docker:/usr/bin/docker
+     - /var/run/docker.sock:/var/run/docker.sock
 ```
 
 We define the following ports as exposed on the host and maped to the container. 
