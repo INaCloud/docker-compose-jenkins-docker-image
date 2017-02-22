@@ -36,14 +36,8 @@ ENV REF_DIR .
 
 ###############################
 #Docker configuration 
-###############################
-
-#Docker sock volume
-VOLUME /var/run/docker.sock
-
-#Docker bin volume
-VOLUME /usr/bin/docker
-
+##############################
+#remember to set the proper volumes on docker-compose.yml
 
 #add docker group to container execute to set env $DOCKER_GROUP_ID
 RUN echo "**** docker_group_id= $dockergroupid *****" &&\

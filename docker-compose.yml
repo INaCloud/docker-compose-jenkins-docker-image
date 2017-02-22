@@ -6,13 +6,18 @@ services:
       context: .
       args:
         dockergroupid: ${DOCKER_GROUP_ID}
-    image: gtunon/docker_master:beta
+    image: gtunon/jenkins_di:beta
     container_name: jenkins_master
     volumes:
       - jenkins_home:/var/jenkins_home
       - /etc/localtime:/etc/localtime:ro
+      #specific volumes
       - /home/ubuntu/dockerImages:/home/ubuntu/dockerImages
       - built_jars:/home/ubuntu/shared/jars
+      #docker volumes
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+
     ports:
       - "8081:8080"
       - "50000:50000"
